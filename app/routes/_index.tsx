@@ -3,8 +3,8 @@ import { Link } from '@remix-run/react'
 
 export const meta: MetaFunction = () => {
   return [
-    { title: 'Remix+Vite' },
-    { name: 'description', content: 'Welcome to Remix+Vite!' },
+    { title: 'Hatchify Remix App' },
+    { name: 'description', content: 'Welcome to Hatchify on Remix!' },
   ]
 }
 
@@ -22,6 +22,11 @@ export default function Index() {
       </div>
       <div className="p-8">
         <ul className="flex flex-col gap-2">
+          <li>
+            <Link to="/todos" className={linkStyle}>
+              Todos
+            </Link>
+          </li>
           <li>
             <Link to="/counter" className={linkStyle}>
               Counter

@@ -1,9 +1,11 @@
 import * as fs from 'node:fs'
+import { Hatchify } from '@hatchifyjs/node'
 import { createRequestHandler } from '@remix-run/express'
 import { installGlobals } from '@remix-run/node'
 import chalk from 'chalk'
 import express from 'express'
 import morgan from 'morgan'
+import { Schemas } from './app/utils/schemas.mjs'
 
 const start = Date.now()
 
@@ -34,6 +36,10 @@ let vite =
 
 const app = express()
 
+app.locals.hatchify = new Hatchify(Schemas, { prefix: '/api' })
+
+await app.locals.hatchify.modelSync({ alter: true })
+
 // handle asset requests
 if (vite) {
   app.use(vite.middlewares)
@@ -55,6 +61,9 @@ app.all(
     build: vite
       ? () => vite.ssrLoadModule('virtual:remix/server-build')
       : await import('./build/server/index.js'),
+    getLoadContext(req, res) {
+      return { hatchify: req.app.locals.hatchify }
+    },
   }),
 )
 
